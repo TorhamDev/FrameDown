@@ -1,0 +1,11 @@
+[project]
+name = "framedown"
+version = "0.1.0"
+description = "A system to upload videos and get other qualities."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.128.0",
+    "passlib[argon2]>=1.7.4",
+    "sqlmodel>=0.0.31",
+]
