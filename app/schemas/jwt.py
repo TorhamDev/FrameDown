@@ -7,6 +7,6 @@ class JwtToken(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: str
+    user_id: int
     exp: int
     iat: int

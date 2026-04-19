@@ -12,7 +12,9 @@ if TYPE_CHECKING:
 class UserService:
     def __init__(self, repository: "UserRepository") -> None:
         self.repository = repository
-        self.jwt_handler = JWTHandler(secret_key="your_secret_key", algorithm="HS256")
+        self.jwt_handler = JWTHandler(
+            secret_key="your_secret_key", algorithm="HS256"
+        )  # TODO: get an env variables going
 
     def register(self, username: str, password: str):
         password_hash = pwd_context.hash(password)
@@ -27,4 +29,6 @@ class UserService:
         if not pwd_context.verify(password, user.password):
             raise InvalidCredentialsException
 
-        return self.jwt_handler.create_token(username=username)
+        assert user.id is not None
+
+        return self.jwt_handler.create_token(user_id=user.id)

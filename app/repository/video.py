@@ -1,0 +1,24 @@
+from sqlmodel import Session, select
+
+from app.models.videos import Video
+
+
+class VideoRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_video_by_id(self, video_id: int):
+        statement = select(Video).where(Video.id == video_id)
+        result = self.session.exec(statement).first()
+        return result
+
+    def create_video(self, title: str, user_id: int, file_path: str):
+        new_video = Video(
+            title=title,
+            user_id=user_id,
+            file=file_path,
+        )
+        self.session.add(new_video)
+        self.session.commit()
+        self.session.refresh(new_video)
+        return new_video

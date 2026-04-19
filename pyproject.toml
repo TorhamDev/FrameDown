@@ -5,8 +5,10 @@ description = "A system to upload videos and get other qualities."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "aiofiles>=25.1.0",
     "fastapi[standard]>=0.128.0",
     "passlib[argon2]>=1.7.4",
     "pyjwt[crypto]>=2.12.1",
+    "python-multipart>=0.0.21",
     "sqlmodel>=0.0.31",
 ]
