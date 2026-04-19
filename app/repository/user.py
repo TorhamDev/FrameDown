@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy.exc import IntegrityError
+from sqlmodel import select
 
 from app.core.exceptions import UserAlreadyExistsException
 from app.models.users import User
@@ -15,7 +16,7 @@ class UserRepository:
 
     def create_user(self, username: str, password: str) -> User:
         db_user = User(
-            Username=username,
+            username=username,
             password=password,
         )
         try:
@@ -29,3 +30,8 @@ class UserRepository:
         assert db_user.id is not None
 
         return db_user
+
+    def get_user_by_username(self, username: str) -> User | None:
+        statement = select(User).where(User.username == username)
+        result = self.session.exec(statement)
+        return result.first()

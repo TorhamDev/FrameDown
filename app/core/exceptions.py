@@ -12,3 +12,8 @@ class BaseException(HTTPException):
 class UserAlreadyExistsException(BaseException):
     status_code = 400
     detail = "User with the given username already exists"
+
+
+class InvalidCredentialsException(BaseException):
+    status_code = 401
+    detail = "Invalid username or password"

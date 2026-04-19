@@ -7,5 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.128.0",
     "passlib[argon2]>=1.7.4",
+    "pyjwt[crypto]>=2.12.1",
     "sqlmodel>=0.0.31",
 ]
