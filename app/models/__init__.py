@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel
 
-from database.db import engine
+from app.database.db import engine
 
 from .users import User
 
