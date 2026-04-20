@@ -1,11 +1,12 @@
 import aiofiles
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, UploadFile
 from sqlmodel import Session
 from typing_extensions import Annotated
 
 from app.database.db import get_session
 from app.repository.video import VideoRepository
 from app.schemas.jwt import TokenData
+from app.tasks.video_qualities_task import process_all_video_qualities
 from app.tools.jwt import credentials
 
 router = APIRouter(prefix="/vids", tags=["videos"])
@@ -14,6 +15,7 @@ router = APIRouter(prefix="/vids", tags=["videos"])
 @router.post("/upload")
 async def upload_video(
     video: UploadFile,
+    background_tasks: BackgroundTasks,
     session: Annotated[Session, Depends(get_session)],
     token_data: TokenData = Depends(credentials),
 ):
@@ -32,7 +34,11 @@ async def upload_video(
         user_id=token_data.user_id,
         file_path=out_file_path,
     )
-
+    background_tasks.add_task(
+        func=process_all_video_qualities,
+        video=db_video,
+        session=session,
+    )
     return {
         "message": "Video uploaded successfully",
         "user": token_data.user_id,

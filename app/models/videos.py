@@ -18,7 +18,6 @@ class Video(SQLModel, table=True):
 class VideoQuality(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     quality: str
-    is_original: bool = Field(default=False)
     file: str
     video_id: Optional[int] = Field(default=None, foreign_key="video.id")
     video: Optional["Video"] = Relationship(back_populates="qualities")
