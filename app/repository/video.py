@@ -22,3 +22,8 @@ class VideoRepository:
         self.session.commit()
         self.session.refresh(new_video)
         return new_video
+
+    def get_videos_by_user_id(self, user_id: int):
+        statement = select(Video).where(Video.user_id == user_id)
+        result = self.session.exec(statement).all()
+        return result

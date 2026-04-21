@@ -6,6 +6,7 @@ from typing_extensions import Annotated
 from app.database.db import get_session
 from app.repository.video import VideoRepository
 from app.schemas.jwt import TokenData
+from app.schemas.videos import Video
 from app.tasks.video_qualities_task import process_all_video_qualities
 from app.tools.jwt import credentials
 
@@ -44,3 +45,14 @@ async def upload_video(
         "user": token_data.user_id,
         "filename": db_video.title,
     }
+
+
+@router.get("")
+async def get_videos(
+    session: Annotated[Session, Depends(get_session)],
+    token_data: TokenData = Depends(credentials),
+) -> list[Video]:
+    repository = VideoRepository(session=session)
+    videos = repository.get_videos_by_user_id(user_id=token_data.user_id)
+    return videos
+
