@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from app.models.videos import Video
+from app.models.videos import Video, VideoQuality
 
 
 class VideoRepository:
@@ -30,5 +30,10 @@ class VideoRepository:
 
     def get_videos_by_user_id(self, user_id: int):
         statement = select(Video).where(Video.user_id == user_id)
+        result = self.session.exec(statement).all()
+        return result
+
+    def get_video_qualities(self, video_id: int):
+        statement = select(VideoQuality).where(VideoQuality.video_id == video_id)
         result = self.session.exec(statement).all()
         return result

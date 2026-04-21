@@ -73,3 +73,20 @@ async def get_video(
         raise exceptions.ResourceNotFound
 
     return video
+
+
+@router.get("/{video_id}/qualities")
+async def get_video_qualities(
+    video_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    token_data: TokenData = Depends(credentials),
+):
+    repository = VideoRepository(session=session)
+    video = repository.get_video_by_id_and_user_id(
+        video_id=video_id,
+        user_id=token_data.user_id,
+    )
+    if not video:
+        raise exceptions.ResourceNotFound
+
+    return video.qualities
