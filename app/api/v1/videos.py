@@ -3,6 +3,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, UploadFile
 from sqlmodel import Session
 from typing_extensions import Annotated
 
+from app.core import exceptions
 from app.database.db import get_session
 from app.repository.video import VideoRepository
 from app.schemas.jwt import TokenData
@@ -56,3 +57,19 @@ async def get_videos(
     videos = repository.get_videos_by_user_id(user_id=token_data.user_id)
     return videos
 
+
+@router.get("/{video_id}")
+async def get_video(
+    video_id: int,
+    session: Annotated[Session, Depends(get_session)],
+    token_data: TokenData = Depends(credentials),
+) -> Video:
+    repository = VideoRepository(session=session)
+    video = repository.get_video_by_id_and_user_id(
+        video_id=video_id,
+        user_id=token_data.user_id,
+    )
+    if not video:
+        raise exceptions.ResourceNotFound
+
+    return video

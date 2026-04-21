@@ -17,3 +17,8 @@ class UserAlreadyExistsException(BaseException):
 class InvalidCredentialsException(BaseException):
     status_code = 401
     detail = "Invalid username or password"
+
+
+class ResourceNotFound(BaseException):
+    status_code = 404
+    detail = "Requested resource not found"
